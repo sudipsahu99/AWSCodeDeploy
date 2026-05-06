@@ -3,7 +3,7 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - mvn clean install
+      - mvn clean package
       - echo Logging in to Amazon ECR...
       - aws --version
       - REPOSITORY_URI=859196001613.dkr.ecr.ap-southeast-2.amazonaws.com/javatechie-registry
@@ -13,8 +13,6 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - echo Build JAR...
-      - mvn clean package
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
