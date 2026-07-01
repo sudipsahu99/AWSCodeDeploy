@@ -1,0 +1,25 @@
+steps:
+# Build the Spring Boot JAR
+- name: 'maven:3.9.6-eclipse-temurin-17'
+  entrypoint: mvn
+  args:
+    - clean
+    - package
+    - -DskipTests
+
+# Build the Docker image
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+    - build
+    - -t
+    - europe-west1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/course-service:latest
+    - .
+
+# Push the image
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+    - push
+    - europe-west1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/course-service:latest
+
+images:
+- europe-west1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/course-service:latest
